@@ -73,7 +73,7 @@ flowchart LR
 
 ## AI Engineering
 
-I integrate LLMs into SaaS products and test automation pipelines. Concrete work, not demos:
+I integrate LLMs into SaaS products and test automation pipelines:
 
 **Agents & LLM chaining**
 
