@@ -75,22 +75,33 @@ flowchart LR
 
 I integrate LLMs into SaaS products and test automation pipelines. Concrete work, not demos:
 
-**Self healing test automation (Robot Framework)**
+**Agents & LLM chaining**
 
-- Runtime interception of locator failures through the Robot Framework listener interface, before the test is marked as failed
-- DOM subtree serialization at the point of failure, pruned to fit a fixed token budget instead of sending the whole page
-- LLM generation of candidate XPath and CSS selectors from the serialized DOM plus the original locator and keyword context
-- Validation of each candidate against the live page (uniqueness, visibility, attribute stability) before any retry
-- Healed locators cached per suite run and emitted as a reviewable diff, so fixes land in version control instead of staying hidden at runtime
+- Multi step agent workflows with tool calling: typed tool schemas, bounded execution loops, state persisted between steps, deterministic fallbacks when model output fails validation
+- Chained LLM calls where each step's output is schema validated and transformed before feeding the next, with checkpointing so a failed step retries without rerunning the whole chain
+
+**RAG pipelines**
+
+- Retrieval pipelines end to end: chunking strategies tuned per content type, embedding generation, vector store indexing, hybrid retrieval combining vector and keyword search, reranking before context assembly
+- Retrieved context scored and truncated to a fixed token budget instead of stuffing the window
+
+**Fine tuning & model selection**
+
+- Dataset curation and formatting for supervised fine tuning, with train/validation splits and comparison against few shot baselines before committing to a tuned model
+- Model routing: small models for classification and extraction, larger models only where the eval data shows reasoning depth matters
+
+**Evals & cost management**
+
+- Fixed eval sets versioned with the prompts, run as regression gates in CI before every prompt or model change
+- Token and latency budgets enforced per endpoint, usage metering per tenant, response caching for repeated prompts
 
 **LLM integration in SaaS products**
 
 - Model API orchestration with structured output: JSON schema constrained responses, parse and validation layer, typed errors on malformed output
 - Retry, timeout, and fallback policies across providers and model versions
-- Prompt versioning treated like code: tracked in git, regression tested with fixed eval sets before every prompt or model change
-- Token and latency budgets enforced per endpoint, with usage metering per tenant
+- Prompt versioning treated like code: tracked in git, reviewed, and regression tested like any other change
 
-**Coverage expansion through generation**
+**Coverage expansion in test automation**
 
 - Test case generation from requirements and OpenAPI specifications, including negative paths, boundary values, and invalid payloads
 - Generated cases deduplicated against the existing suite and traced back to requirements, so coverage gain is measured, not assumed
@@ -121,7 +132,7 @@ I integrate LLMs into SaaS products and test automation pipelines. Concrete work
 
 ### AI Self Healing Automation
 
-Architected and shipped a self healing mechanism for Robot Framework: locator failures are intercepted at runtime, repaired via LLM generated selectors, validated against the live page, and committed as reviewable diffs. Details in the AI Engineering section above.
+Architected and shipped a self healing mechanism for Robot Framework: locator failures are intercepted at runtime through the listener interface, the DOM subtree at the failure point is serialized within a fixed token budget, an LLM generates candidate selectors, each candidate is validated against the live page, and healed locators are emitted as reviewable diffs for version control.
 
 </td>
 <td width="50%" valign="top">
