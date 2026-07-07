@@ -101,10 +101,13 @@ I integrate LLMs into SaaS products and test automation pipelines:
 - Retry, timeout, and fallback policies across providers and model versions
 - Prompt versioning treated like code: tracked in git, reviewed, and regression tested like any other change
 
-**Coverage expansion in test automation**
+**Coverage Intelligence Engine**
 
-- Test case generation from requirements and OpenAPI specifications, including negative paths, boundary values, and invalid payloads
-- Generated cases deduplicated against the existing suite and traced back to requirements, so coverage gain is measured, not assumed
+- A test generation system that ingests requirements, user stories, and OpenAPI contracts, normalizes them into a structured coverage model, and derives executable test scenarios across positive flows, negative flows, boundary conditions, schema violations, authorization rules, and invalid payload combinations.
+
+- Generated scenarios are not treated as “new coverage” by default. They are matched against the existing automation suite, deduplicated semantically, linked back to source requirements and API operations, and promoted only when they increase measurable requirement or contract coverage.
+
+- This turns test expansion from manual case writing into a governed coverage pipeline: source artifact → coverage model → scenario generation → duplicate detection → traceability mapping → coverage delta.
 
 <br/>
 
